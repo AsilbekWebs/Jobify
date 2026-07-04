@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Orqaga qaytish tugmasi -->
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary mb-3">&larr; Dashboardga qaytish</a>
+
+            <!-- Vakansiya kartasi -->
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <!-- Vakansiya sarlavhasi -->
+                    <h1 class="card-title text-primary mb-2">{{ vacancy.title }}</h1>
+
+                    <!-- Kompaniya nomi -->
+                    <h5 class="text-muted mb-4">
+                        <i class="bi bi-building"></i> Kompaniya: <strong>{{ vacancy.company.company_name }}</strong>
+                    </h5>
+
+                    <hr>
+
+                    <!-- Vakansiya ma'lumotlari (Ish haqi, muddat) -->
+                    <div class="row my-4">
+                        <div class="col-sm-6">
+                            <p class="mb-1 text-muted">Ish haqi (Maosh):</p>
+                            <h4><span class="badge bg-success">{{ vacancy.salary }}</span></h4>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-1 text-muted">Oxirgi muddat (Deadline):</p>
+                            <h5><span class="badge bg-warning text-dark">{{ vacancy.deadline|date:"d.m.Y" }}</span></h5>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Vakansiya tavsifi (Description) -->
+                    <div class="vacancy-description">
+                        <h4 class="mb-3">Ish tavsifi va talablar:</h4>
+                        <!-- linebreaksbr filtri matndagi enter (yangi qator) belgilarini saqlab beradi -->
+                        <p class="card-text" style="white-space: pre-line; line-height: 1.6;">
+                            {{ vacancy.description }}
+                        </p>
+                    </div>
+
+                    <hr>
+
+                    <!-- Aloqa yoki harakat tugmasi -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        {% if request.user.companyprofile == vacancy.company %}
+                            <!-- Agar vakansiyani shu kirgan kompaniya o'zi qo'ygan bo'lsa, tahrirlash yoki o'chirish tugmalari -->
+                            <a href="#" class="btn btn-outline-warning">Tahrirlash</a>
+                            <a href="#" class="btn btn-outline-danger">O'chirish</a>
+                        {% else %}
+                            <!-- Agar oddiy foydalanuvchi (ish izlovchi) ko'rayotgan bo'lsa -->
+                            <a href="mailto:{{ vacancy.company.user.email }}" class="btn btn-primary px-4">Topshirish (Apply qilish)</a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

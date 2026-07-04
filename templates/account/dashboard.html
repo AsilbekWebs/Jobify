@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h1>Xush kelibsiz, {{ request.user.username }}!</h1>
+    <p>Sizning rolingiz: <strong>{{ role }}</strong></p>
+    <hr>
+
+    {% if role == 'Candidate' %}
+        <h3>Mening Rezyumelarim</h3>
+        <a href="{% url 'create_resume' %}" class="btn-link">+ Yangi rezyume yuklash</a>
+
+        <ul>
+            {% for resume in resumes %}
+                <li>
+                    <strong>{{ resume.title }}</strong> -
+                    <a href="{{ resume.file.url }}" target="_blank">PDF yuklab olish</a>
+                    <small>({{ resume.created_at|date:"d.m.Y" }})</small>
+                </li>
+            {% empty %}
+                <li>Siz hali rezyume yuklamagansiz.</li>
+            {% endfor %}
+        </ul>
+
+        <h3 style="margin-top: 20px;">Topshirgan Arizalarim (Applies)</h3>
+        <ul>
+            {% for apply in profile.apply_set.all %}
+                <li>
+                    {{ apply.vacancy.title }} ({{ apply.vacancy.company.company_name }}) -
+                    <span>Status: <strong>{{ apply.status }}</strong></span>
+                </li>
+            {% empty %}
+                <li>Siz hali biror bir vakansiyaga ariza topshirmadingiz.</li>
+            {% endfor %}
+        </ul>
+
+    {% elif role == 'Company' %}
+        <h3>Kompaniya nomi: {{ profile.company_name }}</h3>
+
+        <a href="{% url 'create_vacancy' %}" class="btn-link">+ Yangi Vakansiya Joylash</a>
+
+        <h3 style="margin-top: 20px;">Biz joylagan vakansiyalar:</h3>
+        <ul>
+            {% for vacancy in vacancies %}
+                <li>
+                    <strong>{{ vacancy.title }}</strong> - Muddat: {{ vacancy.deadline }} -
+                    <a href="{% url 'vacancy_detail' vacancy.id %}">Ko'rish</a>
+                </li>
+            {% empty %}
+                <li>Siz hali vakansiya joylamadingiz.</li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <p>Siz platforms adminisiz. Saytni boshqarish uchun <a href="/admin/">Admin panelga</a> o'ting.</p>
+    {% endif %}
+
+    <hr style="margin-top: 30px;">
+    <a href="{% url 'logout' %}" style="color: red;">Tizimdan chiqish (Logout)</a>
+</div>
+{% endblock %}

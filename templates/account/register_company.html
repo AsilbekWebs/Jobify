@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="register-box">
+    <h2>Kompaniya (Employer) Sifatida Ro‘yxatdan O‘tish</h2>
+
+    {% if form.errors %}
+        <div style="color: #ff4d4d; background: #ffe6e6; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+            <strong>Iltimos, xatolarni to'g'rilang:</strong>
+            {{ form.errors }}
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Ro‘yxatdan o‘tish</button>
+    </form>
+
+    <p>Akkountingiz bormi? <a href="{% url 'login' %}">Tizimga kirish</a></p>
+</div>
+{% endblock %}
